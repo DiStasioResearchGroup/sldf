@@ -1,0 +1,12 @@
+# Output files of examples
+psi4.log
+pyscf.log
+timer.dat
+sldf.csv
+
+# Cache files
+sldf/__pycache__/
+
+# Package installation files
+*.egg-info/
+build/
