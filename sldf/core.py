@@ -32,32 +32,8 @@ def calc_SLDF(rho, s, weights, nsp):
     with equal alpha and beta densities.
     """
 
-    # Convert to numpy arrays if needed
-    try:
-        rho = np.asarray(rho, dtype=float)
-        s = np.asarray(s, dtype=float)
-        weights = np.asarray(weights, dtype=float)
-    except (ValueError, TypeError) as e:
-        raise ValueError(f"Input arrays must be convertible to float arrays: {e}")
-    
-    # Flatten arrays
-    rho = rho.flatten()
-    s = s.flatten()
-    weights = weights.flatten()
-
-    # Check array lengths
-    if len(rho) != len(s) or len(rho) != len(weights):
-        raise ValueError(f"Input arrays must have the same length. Got rho: {len(rho)}, s: {len(s)}, weights: {len(weights)}")
-
-    # Drop electron density when lower than threshold
-    i_include = np.where(rho > 1e-16)[0]
-    
-    if len(i_include) == 0:
-        raise ValueError("All density values are below threshold (1e-16). Cannot compute SLDF.")
-    
-    rho = rho[i_include]
-    weights = weights[i_include]
-    s = s[i_include]
+    # Proprocess data
+    rho, s, weights = process_data(rho, s, weights)
 
     # For closed shell systems
     rho_a = rho / 2.0
@@ -87,6 +63,47 @@ def calc_SLDF(rho, s, weights, nsp):
     sldf = np.concatenate([splines_x, splines_css, splines_cos])
 
     return sldf
+
+def process_data(rho, *args):
+    """
+    Process and validate input data arrays for SLDF calculation.
+
+    Parameters
+    ----------
+    rho : np.ndarray
+        Electron density values at grid points
+    *args : array_like
+        Additional arrays that should have the same shape as rho
+        (e.g., reduced density gradient, weights, etc.)
+
+    Returns
+    -------
+    tuple
+        Processed and validated (rho, *args) arrays
+    """
+
+    # Convert rho to numpy arrays if needed
+    try:
+        rho = np.asarray(rho, dtype=float).flatten()
+    except (ValueError, TypeError) as e:
+        raise ValueError(f"Input array rho must be convertible to float arrays: {e}")
+
+    # Drop electron density when lower than threshold
+    i_include = np.where(rho > 1e-16)[0]
+    if len(i_include) == 0:
+        raise ValueError("All density values are below threshold (1e-16). Cannot compute SLDF.")
+
+    processed_args = [rho[i_include]]
+    for i, arg in enumerate(args):
+        try:
+            processed_arg = np.asarray(arg, dtype=float).flatten()
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"Input array at position {i+1} must be convertible to float arrays: {e}")
+        if len(processed_arg) != len(rho):
+            raise ValueError(f"Input array at position {i+1} must have the same shape as rho. Got {processed_arg.shape}, expected {rho.shape}.")
+        processed_args.append(processed_arg[i_include])
+
+    return tuple(processed_args)
 
 def calc_LSDA_x(rho_sig):
     """
