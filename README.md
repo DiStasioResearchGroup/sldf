@@ -5,8 +5,8 @@ A Python package for generating Semi-Local Density Fingerprints (SLDF).
 ## Installation
 
 ```bash
-git clone https://github.com/boluo9000/SLDF.git
-cd SLDF
+git clone https://github.com/DiStasioResearchGroup/sldf.git
+cd sldf
 pip install .
 ```
 
