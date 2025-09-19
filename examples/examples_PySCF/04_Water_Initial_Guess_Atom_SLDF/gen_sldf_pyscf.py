@@ -4,7 +4,7 @@ import numpy as np
 import pyscf
 from pyscf import dft
 
-import sldf
+from sldf import calc_SLDF
 
 mol = pyscf.gto.Mole()
 
@@ -40,7 +40,7 @@ rho, dx_rho, dy_rho, dz_rho = pyscf.dft.numint.eval_rho(mol, ao, dm, xctype='GGA
 s = np.sqrt(dx_rho ** 2 + dy_rho ** 2 + dz_rho ** 2) / (rho ** (4/3))
 
 nsp = 20
-sldf = sldf.calc_SLDF(rho, s, weights, nsp)
+sldf = calc_SLDF(rho, s, weights, nsp)
 
 np.savetxt('sldf.csv', sldf)
 

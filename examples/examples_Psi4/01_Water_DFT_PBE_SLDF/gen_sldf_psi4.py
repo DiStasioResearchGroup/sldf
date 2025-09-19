@@ -3,7 +3,7 @@ import os
 import psi4
 import numpy as np
 
-import sldf
+from sldf import calc_SLDF
 
 psi4.set_memory('1000 MB')
 
@@ -107,7 +107,7 @@ weights = np.concatenate(weights, axis=0)
 tau = np.concatenate(tau, axis=0)
 
 nsp = 20
-sldf = sldf.calc_SLDF(rho, s, weights, nsp)
+sldf = calc_SLDF(rho, s, weights, nsp)
 
 np.savetxt('sldf.csv', sldf)
 

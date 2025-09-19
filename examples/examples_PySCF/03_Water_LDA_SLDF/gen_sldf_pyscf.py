@@ -3,7 +3,7 @@ import os
 import numpy as np
 import pyscf
 
-import sldf
+from sldf import calc_SLDF
 
 mol = pyscf.gto.Mole()
 
@@ -47,7 +47,7 @@ occ_orbs = mf.mo_coeff[:, mf.mo_occ > 0.]
 tau = np.einsum('xgp,pi,xgq,qi->g', ao[1:], occ_orbs, ao[1:], occ_orbs)
 
 nsp = 20
-sldf = sldf.calc_SLDF(rho, s, weights, nsp)
+sldf = calc_SLDF(rho, s, weights, nsp)
 
 np.savetxt('sldf.csv', sldf)
 
