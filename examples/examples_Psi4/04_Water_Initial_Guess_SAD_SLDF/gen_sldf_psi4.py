@@ -40,7 +40,7 @@ sad_fitting_list = psi4.core.BasisSet.build(mol, "DF_BASIS_SAD",
 # Use Psi4 SADGuess object to build the SAD Guess
 SAD = psi4.core.SADGuess.build_SAD(basis, sad_basis_list)
 SAD.set_atomic_fit_bases(sad_fitting_list)
-SAD.compute_guess();
+SAD.compute_guess()
 
 D_psi4_mat = SAD.Da()
 D = np.array(D_psi4_mat) 
