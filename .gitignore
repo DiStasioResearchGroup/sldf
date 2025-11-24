@@ -10,3 +10,6 @@ sldf/__pycache__/
 # Package installation files
 *.egg-info/
 build/
+
+# Other files
+.DS_Store
