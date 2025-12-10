@@ -3,6 +3,7 @@ psi4.log
 pyscf.log
 timer.dat
 sldf.csv
+sldf.npy
 
 # Cache files
 sldf/__pycache__/
